@@ -29,6 +29,9 @@ RUN wget http://root.cern.ch/notebooks/rootbinderdata/fastjet.tar.gz
 RUN tar xzf fastjet.tar.gz
 RUN rm fastjet.tar.gz
 
+RUN pip install --upgrade pip
+RUN pip install metakernel --ignore-installed
+
 USER main
 
 # Set ROOT environment
@@ -42,8 +45,6 @@ ENV LD_LIBRARY_PATH "/opt/fastjet/lib:$LD_LIBRARY_PATH"
 ENV ROOT_INCLUDE_PATH "/opt/fastjet/include"
 
 # Customise the ROOTbook
-RUN pip install --upgrade pip
-RUN pip install metakernel --ignore-installed
 RUN mkdir -p                                 $HOME/.ipython/kernels
 RUN cp -r $ROOTSYS/etc/notebook/kernels/root $HOME/.ipython/kernels
 RUN mkdir -p                                 $HOME/.ipython/profile_default/static
