@@ -29,17 +29,7 @@ RUN wget http://root.cern.ch/notebooks/rootbinderdata/fastjet.tar.gz
 RUN tar xzf fastjet.tar.gz
 RUN rm fastjet.tar.gz
 
-## USER main
-
-ENV NB_USER physicist
-ENV NB_UID 1000
-ENV HOME /home/${NB_USER}
-RUN adduser --disabled-password \
-    --gecos "Default user" \
-    --uid ${NB_UID} \
-    ${NB_USER}
-
-USER physicist
+USER main
 
 # Set ROOT environment
 ENV ROOTSYS         "/opt/root"
