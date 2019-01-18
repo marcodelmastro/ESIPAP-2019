@@ -29,8 +29,7 @@ RUN wget http://root.cern.ch/notebooks/rootbinderdata/fastjet.tar.gz
 RUN tar xzf fastjet.tar.gz
 RUN rm fastjet.tar.gz
 
-##RUN pip install --upgrade pip
-RUN pip install --no-cache-dir notebook==5.*
+RUN pip install --upgrade pip
 RUN pip install metakernel --ignore-installed
 
 USER main
