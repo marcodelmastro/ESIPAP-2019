@@ -1,7 +1,6 @@
-
 FROM andrewosh/binder-base
 
-MAINTAINER Enric Tejedor Saavedra <enric.tejedor.saavedra@cern.ch>
+MAINTAINER Marco Delmastro <Marco.Delmastro@cern.ch>
 
 USER root
 
@@ -21,16 +20,11 @@ RUN apt-get install -y \
 # Install R packages
 RUN R -e "install.packages(c('Rcpp','RInside'), repos = \"http://cran.case.edu\")"
 
-# Download and install ROOT master
+# Download and install ROOT
 WORKDIR /opt
-RUN wget http://root.cern.ch/notebooks/rootbinderdata/root.tar.gz 
-RUN tar xzf root.tar.gz
-RUN rm root.tar.gz
-
-# Download and install Fastjet
-RUN wget http://root.cern.ch/notebooks/rootbinderdata/fastjet.tar.gz 
-RUN tar xzf fastjet.tar.gz
-RUN rm fastjet.tar.gz
+RUN wget http://www.borborigmi.org/rootbinder/root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
+RUN tar xzf root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
+RUN rm root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
 
 USER main
 
@@ -39,10 +33,6 @@ ENV ROOTSYS         "/opt/root"
 ENV PATH            "$ROOTSYS/bin:$ROOTSYS/bin/bin:$PATH"
 ENV LD_LIBRARY_PATH "$ROOTSYS/lib:$LD_LIBRARY_PATH"
 ENV PYTHONPATH      "$ROOTSYS/lib:PYTHONPATH"
-
-# Set ROOT environment for Fastjet
-ENV LD_LIBRARY_PATH "/opt/fastjet/lib:$LD_LIBRARY_PATH"
-ENV ROOT_INCLUDE_PATH "/opt/fastjet/include"
 
 # Customise the ROOTbook
 RUN pip install --upgrade pip
