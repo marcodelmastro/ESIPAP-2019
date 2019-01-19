@@ -1,43 +1,34 @@
-FROM andrewosh/binder-base
+FROM rootproject/root-ubuntu16
 
-MAINTAINER Marco Delmastro <Marco.Delmastro@cern.ch>
-
+# Run the following commands as super user (root):
 USER root
 
-# Install ROOT prerequisites
-RUN apt-get update
-RUN apt-get install -y \
-    libx11-6 \
-    libxext6 \
-    libxft2 \
-    libxpm4
-    
-# Install ROOT additional libraries
-#RUN apt-get install -y \
-#    r-base \
-#    r-base-dev
+# Install required packages for notebooks
+RUN apt-get update && apt-get install -y python-pip && pip install --upgrade pip && pip install \
+       jupyter \
+       metakernel \
+       zmq \
+     && rm -rf /var/lib/apt/lists/*
 
-# Install R packages
-#RUN R -e "install.packages(c('Rcpp','RInside'), repos = \"http://cran.case.edu\")"
+# Create a user that does not have root privileges 
+ARG username=physicist
+RUN userdel builder && useradd --create-home --home-dir /home/${username} ${username}
+ENV HOME /home/${username}
 
-# Download and install ROOT
-WORKDIR /opt
-RUN wget https://root.cern.ch/download/root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
-RUN tar xzf root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
-RUN rm root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
+WORKDIR /home/${username}
 
-USER main
+# Add some example notebooks
+#ADD http://root.cern.ch/doc/master/notebooks/mp201_parallelHistoFill.C.nbconvert.ipynb mp201_parallelHistoFill.C.nbconvert.ipynb
+#ADD http://root.cern.ch/doc/master/notebooks/tdf007_snapshot.py.nbconvert.ipynb tdf007_snapshot.py.nbconvert.ipynb
 
-# Set ROOT environment
-ENV ROOTSYS         "/opt/root"
-ENV PATH            "$ROOTSYS/bin:$ROOTSYS/bin/bin:$PATH"
-ENV LD_LIBRARY_PATH "$ROOTSYS/lib:$LD_LIBRARY_PATH"
-ENV PYTHONPATH      "$ROOTSYS/lib:PYTHONPATH"
+# Create the configuration file for jupyter and set owner
+RUN echo "c.NotebookApp.ip = '*'" > jupyter_notebook_config.py && chown ${username} *
 
-# Customise the ROOTbook
-RUN pip install --upgrade pip
-RUN pip install metakernel --ignore-installed
-RUN mkdir -p                                 $HOME/.ipython/kernels
-RUN cp -r $ROOTSYS/etc/notebook/kernels/root $HOME/.ipython/kernels
-RUN mkdir -p                                 $HOME/.ipython/profile_default/static
-RUN cp -r $ROOTSYS/etc/notebook/custom       $HOME/.ipython/profile_default/static
+# Switch to our newly created user
+USER ${username}
+
+# Allow incoming connections on port 8888
+EXPOSE 8888
+
+# Start ROOT with the --notebook flag to fire up the container
+CMD ["root", "--notebook"]
