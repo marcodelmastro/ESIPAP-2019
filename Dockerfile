@@ -22,7 +22,7 @@ RUN R -e "install.packages(c('Rcpp','RInside'), repos = \"http://cran.case.edu\"
 
 # Download and install ROOT
 WORKDIR /opt
-RUN wget http://www.borborigmi.org/rootbinder/root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
+RUN wget https://root.cern.ch/download/root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
 RUN tar xzf root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
 RUN rm root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
 
