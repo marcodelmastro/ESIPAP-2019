@@ -13,18 +13,18 @@ RUN apt-get install -y \
     libxpm4
     
 # Install ROOT additional libraries
-RUN apt-get install -y \
-    r-base \
-    r-base-dev
+#RUN apt-get install -y \
+#    r-base \
+#    r-base-dev
 
 # Install R packages
-RUN R -e "install.packages(c('Rcpp','RInside'), repos = \"http://cran.case.edu\")"
+#RUN R -e "install.packages(c('Rcpp','RInside'), repos = \"http://cran.case.edu\")"
 
 # Download and install ROOT
 WORKDIR /opt
-RUN wget https://root.cern.ch/download/root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
-RUN tar xzf root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
-RUN rm root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
+RUN wget https://root.cern.ch/download/root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
+RUN tar xzf root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
+RUN rm root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
 
 USER main
 
