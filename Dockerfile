@@ -17,7 +17,7 @@ RUN apt-get update
 # RUN gcc -v
 ## gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.9)
 
-# Install Python and dependencies
+# Install Python and dependencies (installs python 2.7)
 RUN apt-get install -y python-pip
 
 # Download and install ROOT in /opt/root
