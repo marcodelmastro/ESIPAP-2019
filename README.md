@@ -6,7 +6,7 @@ The slides for the lectures will appear in [this directory](Slides) as soon as t
 
 ## Homework
 
-I will leave things to do by yourself from day to day, in order to consolidate what we learned during the lectures. Instructions will appear in the [Homework](directory).
+I will leave things to do by yourself from day to day, in order to consolidate what we learned during the lectures. Instructions will appear in the [Homework](Homework) directory.
 
 ## Analysis exercise
 
