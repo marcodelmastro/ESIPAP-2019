@@ -4,6 +4,10 @@
 
 The slides for the lectures will appear in [this directory](Slides) as soon as the course proceeds.
 
+## Homework
+
+I will leave things to do by yourself from day to day, in order to consolidate what we learned during the lectures. Instructions will appear in the [Homework](directory).
+
 ## Analysis exercise
 
 At some point, we will make a simple analysis exercise. We will use [ROOT](https://root.cern) and [Python](https://www.python.org) with a [Jupyter](https://jupyter.org) notebook.
