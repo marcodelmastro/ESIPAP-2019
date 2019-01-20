@@ -39,7 +39,13 @@ ARG username=physicist
 RUN userdel builder && useradd --create-home --home-dir /home/${username} ${username}
 ENV HOME /home/${username}
 
-USER ${username} 
+# Copy repository in user home
+COPY . ${HOME}
+RUN chown -R ${username} ${HOME}
+
+# Switch to normal user
+USER ${username}
+WORKDIR ${HOME}
 
 # Set ROOT environment
 ENV ROOTSYS         "/opt/root"
@@ -52,4 +58,4 @@ RUN mkdir -p                                 $HOME/.ipython/kernels
 RUN cp -r $ROOTSYS/etc/notebook/kernels/root $HOME/.ipython/kernels
 RUN mkdir -p                                 $HOME/.ipython/profile_default/static
 RUN cp -r $ROOTSYS/etc/notebook/custom       $HOME/.ipython/profile_default/static
-RUN cd ${HOME}
+
