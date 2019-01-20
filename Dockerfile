@@ -1,4 +1,4 @@
-FROM dockerfile/ubuntu:14.04
+FROM rootproject/root-ubuntu16
 
 MAINTAINER Marco Delmastro <Marco.Delmastro@cern.ch>
 
@@ -6,21 +6,40 @@ USER root
 
 # Install ROOT prerequisites
 RUN apt-get update
-RUN apt-get install -y \
-    libx11-6 \
-    libxext6 \
-    libxft2 \
-    libxpm4
 
-RUN gcc -v
+## Not needed for root-ubuntu16, already up to date
+#RUN apt-get install -y \
+#    libx11-6 \
+#    libxext6 \
+#    libxft2 \
+#    libxpm4
 
-# Download and install ROOT
+# RUN gcc -v
+## gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.9)
+
+# Install Python and dependencies
+RUN apt-get install -y python-pip
+
+# Download and install ROOT in /opt/root
+RUN apt-get install -y wget
 WORKDIR /opt
-RUN wget https://root.cern.ch/download/root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
-RUN tar xzf root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
-RUN rm root_v6.14.06.Linux-ubuntu14-x86_64-gcc4.8.tar.gz
+ARG rootsrc=root_v6.14.06.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
+RUN wget https://root.cern.ch/download/${rootsrc}
+RUN tar xzf ${rootsrc}
+RUN rm ${rootsrc}
 
-USER main
+# Install dependencies to run notebooks
+RUN pip install --upgrade pip
+RUN pip install jupyter \
+                metakernel \
+                zmq
+
+# Create a user that does not have root privileges
+ARG username=physicist
+RUN userdel builder && useradd --create-home --home-dir /home/${username} ${username}
+ENV HOME /home/${username}
+
+USER ${username} 
 
 # Set ROOT environment
 ENV ROOTSYS         "/opt/root"
@@ -28,15 +47,9 @@ ENV PATH            "$ROOTSYS/bin:$ROOTSYS/bin/bin:$PATH"
 ENV LD_LIBRARY_PATH "$ROOTSYS/lib:$LD_LIBRARY_PATH"
 ENV PYTHONPATH      "$ROOTSYS/lib:PYTHONPATH"
 
-# Install pip and dependencies to run notebooks
-RUN pip install --upgrade pip
-RUN pip install jupyter \
-                metakernel \
-                zmq
-		## --ignore-installed
-
 # Customize the local environement
 RUN mkdir -p                                 $HOME/.ipython/kernels
 RUN cp -r $ROOTSYS/etc/notebook/kernels/root $HOME/.ipython/kernels
 RUN mkdir -p                                 $HOME/.ipython/profile_default/static
 RUN cp -r $ROOTSYS/etc/notebook/custom       $HOME/.ipython/profile_default/static
+RUN cd ${HOME}
