@@ -1,4 +1,4 @@
-FROM dockerfile/ubuntu
+FROM dockerfile/ubuntu:14.04
 
 MAINTAINER Marco Delmastro <Marco.Delmastro@cern.ch>
 
@@ -11,6 +11,8 @@ RUN apt-get install -y \
     libxext6 \
     libxft2 \
     libxpm4
+
+RUN gcc -v
 
 # Download and install ROOT
 WORKDIR /opt
