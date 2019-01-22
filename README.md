@@ -1,4 +1,4 @@
-# ESIPAP-2019 - Experimental Particle Physics
+# ESIPAP 2019 - Experimental Particle Physics
 
 ## Slides
 
