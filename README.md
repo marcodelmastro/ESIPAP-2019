@@ -2,7 +2,7 @@
 
 ## Slides
 
-The slides for the lectures will appear in [this directory](Slides) as soon as the course proceeds.
+The slides of the lectures will appear in [this directory](Slides) as the course proceeds.
 
 ## Homework
 
